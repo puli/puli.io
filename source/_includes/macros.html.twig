@@ -1,0 +1,4 @@
+{% macro date(timestamp) -%}
+    <time class="hidden-xs" datetime="{{ timestamp|date("Y-m-d") }}">{{ timestamp|date("F j, Y") }}</time>
+    <time class="visible-xs-inline" datetime="{{ timestamp|date("Y-m-d") }}">{{ timestamp|date("M j, Y") }}</time>
+{%- endmacro %}

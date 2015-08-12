@@ -1,4 +1,15 @@
-/output_dev
-/.sculpin
+<<<<<<< HEAD
+/.sculpin/
 /sculpin.lock
 /deploy.ini
+/app/cache/*
+/app/config/sculpin_kernel_*.yml
+/app/config/sculpin_site_*.yml
+/app/logs/*
+/output_*/
+/source/css/style.css
+/source/js/jquery.min.js
+/source/js/bootstrap.min.js
+/source/fonts/
+/node_modules/
+s3.conf

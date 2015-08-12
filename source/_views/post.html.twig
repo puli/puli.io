@@ -1,0 +1,41 @@
+{% extends 'default.html.twig' %}
+
+{% set page = page|merge({'section': 'blog'}) %}
+
+{% block head_meta %}
+    <meta name="robots" content="index, follow">
+{% endblock %}
+
+{% block page_header %}
+    <ol class="breadcrumb">
+        <li><a href="/">Home</a></li>
+        <li><a href="/blog">Blog</a></li>
+        <li class="active">{{ page.title }}</li>
+    </ol>
+{% endblock %}
+
+{% block content_wrapper %}
+    {% import 'macros.html.twig' as macros %}
+
+    <article>
+        <header>
+            <h1>{{ page.title }}</h1>
+            <p>Posted on {{ macros.date(page.calculated_date) }}</p>
+        </header>
+
+        {{ page.blocks.content|raw }}
+
+        {% if page.previous_post or page.next_post %}
+            <nav class="article">
+                <ul>
+                    {% if page.next_post %}
+                        <li>Next: <a class="next" href="{{ site.url }}{{ page.next_post.url }}" title="{{ page.next_post.title }}"><span class="title">{{ page.next_post.title }}</span></a></li>
+                    {% endif %}
+                    {% if page.previous_post %}
+                        <li>Previous: <a class="previous" href="{{ site.url }}{{ page.previous_post.url }}" title="{{ page.previous_post.title }}"><span class="title">{{ page.previous_post.title }}</span></a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    </article>
+{% endblock %}
