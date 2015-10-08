@@ -1,0 +1,15 @@
+.list-inline {
+    list-style: none;
+    margin-left: 0;
+
+    > li {
+        display: inline-block;
+        padding: 0;
+    }
+
+    > li + li:before {
+        content: "|\00a0";
+        padding: 0 7px;
+        color: #ccc;
+    }
+}

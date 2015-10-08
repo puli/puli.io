@@ -4,4 +4,9 @@
     height: 80px;
     border-top: 1px solid $gray-lighter;
     padding-top: $padding-large-vertical;
+    color: $gray-light;
+
+    a {
+        color: $gray-darker;
+    }
 }
