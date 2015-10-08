@@ -76,57 +76,63 @@ section: features
             <pre><code class="language-php">echo $twig->render('/batman/blog/views/index.html.twig');</code></pre>
 
             <p>Puli paths usually start with the name of the package that contains the
-                loaded file1.</p>
+                loaded file.</p>
+
+            <h2>Class Discovery</h2>
+
+            <p>With Puli, you can find classes that implement specific
+                interfaces from other packages. For example, if you create a
+                <code>Plugin</code> interface, you can load all classes
+                implementing that interface with Puli's <code>Discovery</code>:</p>
+
+<pre><code class="language-php">use Thor\Core\Plugin;
+
+foreach ($discovery->findBindings(Plugin::class) as $binding) {
+    $pluginClass = $binding->getClassName();
+    $plugin = new $pluginClass();
+
+    // do something...
+}</code></pre>
+
+            <p>Classes can only be found if they were exported by their package.
+                This is done by the package author with Puli's Command Line
+                Interface (CLI):</p>
+
+            <pre><code class="language-none">$ puli bind Batman\\BlogPlugin Thor\\Core\\Plugin</code></pre>
 
             <h2>Resource Discovery</h2>
 
-            <p>With Puli, you can load files of specific types from other packages.
+            <p>Like classes, you can also discover resources in other packages.
                 For example, if you implement a <code>Translator</code> class,
                 you can load message files that contain the translations you
                 want to use:</p>
 
-<pre><code class="language-php">foreach ($discovery->findByType('thor/message-catalog') as $binding) {
+<pre><code class="language-php">foreach ($discovery->findBindings('thor/message-catalog') as $binding) {
     foreach ($binding->getResources() as $resource) {
-        loadCatalog($resource->getBody());
+        $yaml = $resource->getBody();
+
+        // do something...
     }
 }</code></pre>
 
-            <p>Your package is the <em>consumer</em> of catalog files. Other
-                packages may <em>provide</em> these files. The common vocabulary
-                between consumers and providers is a <em>binding type</em>:
-                a simple string prefixed by a vendor namespace, like
-                <code>"thor/message-catalog"</code>. Consumers receive all
-                files that were bound to their type by the providers:</p>
+            <p>Instead of an interface name, we use a simple string
+                <code>"thor/message-catalog"</code> to discover the resources.
+                This string is called a <em>binding type</em>. As with classes,
+                resources need to be bound to a binding type by the author of
+                their package:</p>
 
             <pre><code class="language-none">$ puli bind /batman/blog/trans/messages.*.yml thor/message-catalog</code></pre>
 
-            <p>Each binding may cover a single or multiple resources. That's
-                why we used a double <code>for</code>-loop above.</p>
-
-            <h2>Service Loading</h2>
-
-            <p>You can use Puli to load objects from Puli packages that
-                implement specific PHP interfaces. If you're interested in all
-                classes that implement the <code>Plugin</code> interface, load
-                them with the service loader:</p>
-
-<pre><code class="language-php">foreach ($loader->loadServices(Plugin::class) as $plugin) {
-    initialize($plugin);
-}</code></pre>
-
-            <p>A package that provides such a service needs to explicitly export
-            the class:</p>
-
-            <pre><code class="language-none">$ puli export Batman\Blog\BlogPlugin Plugin</code></pre>
-
             <h2>Resource URLs</h2>
 
-            <p>Puli can be used to generate URLs of public resources, such as
-                CSS stylesheets or images:</p>
+            <p>Puli can be used to generate URLs of your public resources, such
+                as your CSS stylesheets or images:</p>
 
             <pre><code class="language-twig">{% raw %}&lt;img src="{{ resource_url('/batman/blog/public/logo.png') }}" /&gt;{% endraw %}</code></pre>
 
-            <p>You have precise control over the generated URLs.</p>
+            <p>You use Puli paths in your code to generate the URLs. The
+                application that uses your package finally configures how the
+                URLs should be generated.</p>
         </div>
     </section>
 
