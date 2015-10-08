@@ -14,7 +14,7 @@ use: [posts]
         <article>
             <header>
                 <h1>{{ post.title }}</h1>
-                <p>Posted by {{ post.author }} on {{ macros.date(post.calculated_date) }}</p>
+                <p class="blog-post-date">Posted by {{ post.author }} on {{ macros.date(post.calculated_date) }}</p>
             </header>
 
             {{ post.blocks.content|raw }}

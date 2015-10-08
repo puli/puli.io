@@ -1,0 +1,13 @@
+.blog-post-date {
+    background-color: #eee;
+    padding: $padding-base-vertical $padding-base-horizontal;
+
+    &:before {
+        @extend .glyphicon;
+        @extend .glyphicon-calendar;
+
+        color: #aaa;
+        font-size: .9em;
+        margin-right: 0.5*$padding-base-horizontal;
+    }
+}
