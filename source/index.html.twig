@@ -118,9 +118,8 @@ foreach ($discovery->findBindings(Plugin::class) as $binding) {
 
             <p>Instead of an interface name, we use a simple string
                 <code>"thor/message-catalog"</code> to discover the resources.
-                This string is called a <em>binding type</em>. As with classes,
-                resources need to be bound to a binding type by the author of
-                their package:</p>
+                As with classes, resources need to be exported by the author of
+                their package before we can find them:</p>
 
             <pre><code class="language-none">$ puli bind /batman/blog/trans/messages.*.yml thor/message-catalog</code></pre>
 
