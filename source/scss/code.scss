@@ -36,25 +36,25 @@ pre {
 
 pre::selection {
     /* Safari */
-    background: hsl(200, 4%, 16%);
+    background: hsla(0, 0%, 93%, 0.2); /* #EDEDED */
 }
 
 pre::selection {
     /* Firefox */
-    background: hsl(200, 4%, 16%);
+    background: hsla(0, 0%, 93%, 0.2); /* #EDEDED */
 }
 
 /* Text Selection colour */
 pre::-moz-selection, pre ::-moz-selection,
 code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {
     text-shadow: none;
-    background: hsla(0, 0%, 93%, 0.15); /* #EDEDED */
+    background: hsla(0, 0%, 93%, 0.2); /* #EDEDED */
 }
 
 pre::selection, pre ::selection,
 code[class*="language-"]::selection, code[class*="language-"] ::selection {
     text-shadow: none;
-    background: hsla(0, 0%, 93%, 0.15); /* #EDEDED */
+    background: hsla(0, 0%, 93%, 0.2); /* #EDEDED */
 }
 
 .token.comment,
@@ -70,7 +70,7 @@ code[class*="language-"]::selection, code[class*="language-"] ::selection {
 
 .token.namespace,
 .token.prolog {
-    opacity: .7;
+    color: hsl(207, 40%, 50%);
 }
 
 .token.keyword,
@@ -78,7 +78,7 @@ code[class*="language-"]::selection, code[class*="language-"] ::selection {
 .token.selector,
 .token.symbol,
 .token.builtin {
-    color: hsl(93, 73%, 68%);
+    color: hsl(93, 90%, 75%);
 }
 
 .token.tag,
@@ -90,9 +90,8 @@ code[class*="language-"]::selection, code[class*="language-"] ::selection {
 .token.function,
 .token.constant,
 .language-markup .token.punctuation,
-.language-markup .token.attr-name,
-.language-markup .token.prolog {
-    color: hsl(207, 55%, 68%);
+.language-markup .token.attr-name {
+    color: hsl(207, 95%, 80%);
 }
 
 .token.attr-name,
@@ -103,7 +102,7 @@ code[class*="language-"]::selection, code[class*="language-"] ::selection {
 .token.number,
 .language-css .token.string,
 .style .token.string {
-    color: hsl(48, 87%, 60%);
+    color: hsl(48, 100%, 60%);
 }
 
 .token.important,
