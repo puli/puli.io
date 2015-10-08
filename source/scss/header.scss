@@ -1,0 +1,12 @@
+@import "bootstrap-variables";
+
+.header-wrapper {
+    background-color: $brand-primary;
+    color: white;
+    margin-bottom: $line-height-computed;
+
+    .navbar {
+        margin: 0;
+        border-width: 0;
+    }
+}
