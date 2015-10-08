@@ -1,0 +1,14 @@
+@import "variables";
+
+.navbar {
+    border-width: 0 0 1px 0;
+}
+
+.navbar-brand {
+    line-height: $navbar-brand-height;
+    padding: $navbar-brand-padding-vertical $navbar-brand-padding-right $navbar-brand-padding-vertical $navbar-brand-padding-left;
+}
+
+.navbar-nav {
+    margin-right: 15px;
+}
