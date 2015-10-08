@@ -2,11 +2,11 @@
 
 .footer {
     height: 80px;
-    border-top: 1px solid $gray-lighter;
+    border-top: 1px solid $gray-border;
     padding-top: $padding-large-vertical;
-    color: $gray-light;
+    color: $gray-text;
 
     a {
-        color: $gray-darker;
+        color: $gray-text-dark;
     }
 }
