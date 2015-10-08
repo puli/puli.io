@@ -133,6 +133,17 @@ foreach ($discovery->findBindings(Plugin::class) as $binding) {
             <p>You use Puli paths in your code to generate the URLs. The
                 application that uses your package finally configures how the
                 URLs should be generated.</p>
+
+            <h2>Package Overriding</h2>
+
+            <p>Puli makes it easy to let your package override another package.
+                For example, let's override the <code>layout.html.twig</code>
+                file of the <code>batman/blog</code> package in our application:</p>
+
+            <pre><code class="language-none">$ puli map /batman/blog/views/layout.html.twig res/views/layout.html.twig</code></pre>
+
+            <p>Wherever that <code>layout.html.twig</code> file is used, our
+                own file will now be used instead.</p>
         </div>
     </section>
 
