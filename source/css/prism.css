@@ -32,7 +32,6 @@ pre {
     border: .3em solid hsl(0, 0%, 33%);
     box-shadow: 1px 1px .5em black inset;
     overflow: auto;
-    padding: 1em;
 }
 
 pre::selection {

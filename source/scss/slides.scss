@@ -1,0 +1,52 @@
+
+.slide {
+    width: 100%;
+    position: relative;
+}
+
+.slide-body {
+    padding: 100px $grid-gutter-width/2;
+
+    *:first-child {
+        margin-top: 0;
+    }
+
+    *:last-child {
+        margin-bottom: 0;
+    }
+
+    h1 {
+        font-size: 50px;
+        font-weight: 300;
+        text-align: center;
+    }
+
+    .lead {
+        font-family: $headings-font-family;
+        font-weight: 300;
+        font-size: 25px;
+        margin-top: 10px;
+        text-align: center;
+    }
+}
+
+.slide1 {
+    color: white;
+    background: url(/images/volcano-2048.jpg) no-repeat bottom center;
+    background-size: 100% 100%;
+    min-height: 100%;
+
+    .slide-body {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateY(-50%) translateX(-50%);
+    }
+}
+
+.slide3 {
+    background-color: hsl(206, 21%, 97%);
+    border-width: 1px 0;
+    border-style: solid;
+    border-color: darken(hsl(206, 21%, 97%), 5%);
+}

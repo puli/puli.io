@@ -1,37 +1,136 @@
 ---
-layout: default
-title: Blog
-section: blog
-generator: pagination
-pagination:
-    max_per_page: 7
-use: [posts]
+layout: base
+section: features
 ---
-{% block page_header %}
-    <ol class="breadcrumb">
-        <li><a href="/">Home</a></li>
-        <li class="active">Blog</li>
-    </ol>
-{% endblock %}
+{% block title %}Puli - Universal Packages for PHP{% endblock %}
 
-{% block content %}
-    {% import 'macros.html' as macros %}
+{% block body %}
+    <div class="container-fluid slide slide1">
+        <div class="container">
+            {% include 'header.html.twig' with {'navbar_style': 'navbar-inverse'}%}
+        </div>
+        <div class="container slide-body">
+            <h1>Universal Packages for PHP</h1>
 
-    {% for post in page.pagination.items %}
-        <article>
-            <header>
-                <h1>{{ post.title }}</h1>
-                <p>Posted on {{ macros.date(post.calculated_date) }}</p>
-            </header>
+            <p class="lead">Easy to install. Platform independent.</p>
+        </div>
+    </div>
 
-            {{ post.blocks.content|raw }}
-        </article>
-    {% endfor %}
+    <section class="slide slide2">
+        <div class="container slide-body">
+            <h1>One PHP Community</h1>
 
-    {% if page.pagination.previous_page or page.pagination.next_page %}
-        <nav>
-            {% if page.pagination.previous_page %}<a href="{{ site.url }}{{ page.pagination.previous_page.url }}">Newer Posts</a>{% endif %}<br />
-            {% if page.pagination.next_page %}<a href="{{ site.url }}{{ page.pagination.next_page.url }}">Older Posts</a>{% endif %}<br />
-        </nav>
-    {% endif %}
+            <p class="lead">Embrace collaboration and sharing.</p>
+
+            <p>Puli (pronounced "poo-lee") is a toolkit for creating and loading
+                PHP packages. Puli's goal is to support collaboration and
+                sharing in the PHP community by replacing the "bundle", "module"
+                and "plugin" concepts of different platforms by one common
+                solution.</p>
+
+            <p class="text-center"><img src="/images/community.png" alt="Unify the PHP community."/></p>
+        </div>
+    </section>
+
+    <section class="slide slide3">
+        <div class="container slide-body">
+            <h1>The Puli Package</h1>
+
+            <p class="lead">A universal package concept.</p>
+
+            <p>A Puli package is a directory that contains a <code>puli.json</code> file.
+                This file configures how Puli loads the package.</p>
+
+<pre><code class="language-none">my-package/
+    src/
+        ... PHP classes ...
+    res/
+        ... resource files ...
+    puli.json
+</code></pre>
+
+            <p>Typically, Puli
+                packages are distributed and installed with
+                <a href="https://getcomposer.org" title="Composer, the dependency manager for PHP">Composer</a>:</p>
+
+            <pre><code class="language-none">$ composer install vendor/my-package</code></pre>
+
+            <p>The <a href="">Puli plugin for Composer</a> recognizes and
+                activates installed packages. You can also use other channels of
+                distribution and activate your packages manually.</p>
+        </div>
+    </section>
+
+    <section class="slide slide4">
+        <div class="container slide-body">
+            <h1>Powerful Features</h1>
+
+            <p class="lead">Composer packages on steroids.</p>
+
+            <h2>Resource Access</h2>
+
+            <p>Puli provides a naming convention to load non-PHP files, such as YAML,
+                XML, CSS, HTML, images and more from a Puli package. These files are
+                accessed through <em>Puli paths</em>:</p>
+
+            <pre><code class="language-php">echo $twig->render('/batman/blog/views/index.html.twig');</code></pre>
+
+            <p>Puli paths usually start with the name of the package that contains the
+                loaded file1.</p>
+
+            <h2>Resource Discovery</h2>
+
+            <p>With Puli, you can load files of specific types from other packages.
+                For example, if you implement a <code>Translator</code> class,
+                you can load message files that contain the translations you
+                want to use:</p>
+
+<pre><code class="language-php">foreach ($discovery->findByType('thor/message-catalog') as $binding) {
+    foreach ($binding->getResources() as $resource) {
+        loadCatalog($resource->getBody());
+    }
+}</code></pre>
+
+            <p>Your package is the <em>consumer</em> of catalog files. Other
+                packages may <em>provide</em> these files. The common vocabulary
+                between consumers and providers is a <em>binding type</em>:
+                a simple string prefixed by a vendor namespace, like
+                <code>"thor/message-catalog"</code>. Consumers receive all
+                files that were bound to their type by the providers:</p>
+
+            <pre><code class="language-none">$ puli bind /batman/blog/trans/messages.*.yml thor/message-catalog</code></pre>
+
+            <p>Each binding may cover a single or multiple resources. That's
+                why we used a double <code>for</code>-loop above.</p>
+
+            <h2>Service Loading</h2>
+
+            <p>You can use Puli to load objects from Puli packages that
+                implement specific PHP interfaces. If you're interested in all
+                classes that implement the <code>Plugin</code> interface, load
+                them with the service loader:</p>
+
+<pre><code class="language-php">foreach ($loader->loadServices(Plugin::class) as $plugin) {
+    initialize($plugin);
+}</code></pre>
+
+            <p>A package that provides such a service needs to explicitly export
+            the class:</p>
+
+            <pre><code class="language-none">$ puli export Batman\Blog\BlogPlugin Plugin</code></pre>
+
+            <h2>Resource URLs</h2>
+
+            <p>Puli can be used to generate URLs of public resources, such as
+                CSS stylesheets or images:</p>
+
+            <pre><code class="language-twig">{% raw %}&lt;img src="{{ resource_url('/batman/blog/public/logo.png') }}" /&gt;{% endraw %}</code></pre>
+
+            <p>You have precise control over the generated URLs.</p>
+        </div>
+    </section>
+
+    <div class="container">
+        {% include 'footer.html.twig' %}
+    </div>
 {% endblock %}

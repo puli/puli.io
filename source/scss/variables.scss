@@ -1,0 +1,11 @@
+$base-font:             'PT Sans';
+$base-font-fallback:    sans-serif;
+
+$header-font:           'Titillium Web';
+$header-font-fallback:  serif;
+$header-font-weight:    700;
+
+$navbar-brand-height:           30px;
+$navbar-brand-padding-vertical: (($navbar-height - $navbar-brand-height) / 2);
+$navbar-brand-padding-left:     15px;
+$navbar-brand-padding-right:    15px;
