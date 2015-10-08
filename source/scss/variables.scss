@@ -1,9 +1,4 @@
-$base-font:             'PT Sans';
-$base-font-fallback:    sans-serif;
-
-$header-font:           'Titillium Web';
-$header-font-fallback:  serif;
-$header-font-weight:    700;
+@import "variables-bootstrap";
 
 $navbar-brand-height:           30px;
 $navbar-brand-padding-vertical: (($navbar-height - $navbar-brand-height) / 2);

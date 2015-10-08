@@ -1,8 +1,7 @@
-@import "bootstrap-variables";
+@import "variables";
 
 .header-wrapper {
     background-color: $brand-primary;
-    color: white;
     margin-bottom: $line-height-computed;
 
     .navbar {

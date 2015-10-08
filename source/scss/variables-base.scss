@@ -1,0 +1,22 @@
+$green:             hsl(171, 100%, 26%);
+$green-lighter:     hsl(171, 24%, 71%);
+
+$gray-text:         hsl(171, 5%, 49.0%) !default;
+$gray-text-light:   hsl(171, 5%, 60.0%) !default;
+$gray-text-dark:    hsl(171, 5%, 30.0%) !default;
+
+$gray-border:       hsl(171, 20%, 85.0%) !default;
+$gray-border-light: hsl(171, 20%, 90.0%) !default;
+
+$gray-bg-darker:    hsl(171, 20%, 20.0%) !default;
+$gray-bg-dark:      hsl(171, 20%, 40.0%) !default;
+$gray-bg:           hsl(171, 20%, 92.0%) !default;
+$gray-bg-light:     hsl(171, 20%, 94.0%) !default;
+$gray-bg-lighter:   hsl(171, 20%, 96.0%) !default;
+
+$base-font:             'PT Sans';
+$base-font-fallback:    sans-serif;
+
+$header-font:           'Titillium Web';
+$header-font-fallback:  serif;
+$header-font-weight:    700;

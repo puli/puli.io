@@ -1,4 +1,7 @@
+@import "variables-base";
+
 $bootstrap-sass-asset-helper: false !default;
+
 //
 // Variables
 // --------------------------------------------------
@@ -395,7 +398,7 @@ $navbar-inverse-bg:                         transparent !default;
 $navbar-inverse-border:                     white !default;
 
 // Inverted navbar links
-$navbar-inverse-link-color:                 white !default;
+$navbar-inverse-link-color:                 $green-lighter !default;
 $navbar-inverse-link-hover-color:           white !default;
 $navbar-inverse-link-hover-bg:              transparent !default;
 $navbar-inverse-link-active-color:          $navbar-inverse-link-hover-color !default;
@@ -405,13 +408,13 @@ $navbar-inverse-link-disabled-bg:           transparent !default;
 
 // Inverted navbar brand label
 $navbar-inverse-brand-color:                $navbar-inverse-link-color !default;
-$navbar-inverse-brand-hover-color:          #fff !default;
+$navbar-inverse-brand-hover-color:          white !default;
 $navbar-inverse-brand-hover-bg:             transparent !default;
 
 // Inverted navbar toggle
 $navbar-inverse-toggle-hover-bg:            #333 !default;
-$navbar-inverse-toggle-icon-bar-bg:         #fff !default;
-$navbar-inverse-toggle-border-color:        #333 !default;
+$navbar-inverse-toggle-icon-bar-bg:         white !default;
+$navbar-inverse-toggle-border-color:        white !default;
 
 
 //== Navs

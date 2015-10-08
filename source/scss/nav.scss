@@ -2,6 +2,7 @@
 
 .navbar {
     border-width: 0 0 1px 0;
+    font-weight: bold;
 }
 
 .navbar-brand {
@@ -11,4 +12,12 @@
 
 .navbar-nav {
     margin-right: 15px;
+}
+
+.navbar-transparent {
+    background: transparent;
+
+    .navbar-nav > li > a {
+        color: hsl(208, 21%, 80%);
+    }
 }

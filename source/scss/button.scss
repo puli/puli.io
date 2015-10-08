@@ -1,0 +1,5 @@
+@import "../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/_buttons";
+
+.btn-white {
+    @include button-variant(black, white, transparent);
+}

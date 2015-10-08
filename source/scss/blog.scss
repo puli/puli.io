@@ -1,12 +1,14 @@
+@import "variables";
+
 .blog-post-date {
-    background-color: #eee;
+    background-color: $gray-bg-light;
     padding: $padding-base-vertical $padding-base-horizontal;
 
     &:before {
         @extend .glyphicon;
         @extend .glyphicon-calendar;
 
-        color: #aaa;
+        color: $gray-text;
         font-size: .9em;
         margin-right: 0.5*$padding-base-horizontal;
     }
