@@ -29,23 +29,22 @@
  * @author Thomas Rudolph <me@holloway-web.de>
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
-
 process(is_array($argv) ? $argv : array());
 
 /**
- * processes the installer
+ * processes the installer.
  */
 function process($argv)
 {
-    $check      = in_array('--check', $argv);
-    $help       = in_array('--help', $argv);
-    $force      = in_array('--force', $argv);
-    $quiet      = in_array('--quiet', $argv);
+    $check = in_array('--check', $argv);
+    $help = in_array('--help', $argv);
+    $force = in_array('--force', $argv);
+    $quiet = in_array('--quiet', $argv);
     $disableTls = in_array('--disable-tls', $argv);
     $installDir = false;
-    $version    = false;
-    $filename   = 'puli.phar';
-    $cafile     = false;
+    $version = false;
+    $filename = 'puli.phar';
+    $cafile = false;
 
     // --no-ansi wins over --ansi
     if (in_array('--no-ansi', $argv)) {
@@ -56,7 +55,7 @@ function process($argv)
         // On Windows, default to no ANSI, except in ANSICON and ConEmu.
         // Everywhere else, default to ANSI if stdout is a terminal.
         define('USE_ANSI',
-            (DIRECTORY_SEPARATOR == '\\')
+            (DIRECTORY_SEPARATOR === '\\')
                 ? (false !== getenv('ANSICON') || 'ON' === getenv('ConEmuANSI'))
                 : (function_exists('posix_isatty') && posix_isatty(1))
         );
@@ -64,32 +63,32 @@ function process($argv)
 
     foreach ($argv as $key => $val) {
         if (0 === strpos($val, '--install-dir')) {
-            if (13 === strlen($val) && isset($argv[$key+1])) {
-                $installDir = trim($argv[$key+1]);
+            if (13 === strlen($val) && isset($argv[$key + 1])) {
+                $installDir = trim($argv[$key + 1]);
             } else {
                 $installDir = trim(substr($val, 14));
             }
         }
 
         if (0 === strpos($val, '--version')) {
-            if (9 === strlen($val) && isset($argv[$key+1])) {
-                $version = trim($argv[$key+1]);
+            if (9 === strlen($val) && isset($argv[$key + 1])) {
+                $version = trim($argv[$key + 1]);
             } else {
                 $version = trim(substr($val, 10));
             }
         }
 
         if (0 === strpos($val, '--filename')) {
-            if (10 === strlen($val) && isset($argv[$key+1])) {
-                $filename = trim($argv[$key+1]);
+            if (10 === strlen($val) && isset($argv[$key + 1])) {
+                $filename = trim($argv[$key + 1]);
             } else {
                 $filename = trim(substr($val, 11));
             }
         }
 
         if (0 === strpos($val, '--cafile')) {
-            if (8 === strlen($val) && isset($argv[$key+1])) {
-                $cafile = trim($argv[$key+1]);
+            if (8 === strlen($val) && isset($argv[$key + 1])) {
+                $cafile = trim($argv[$key + 1]);
             } else {
                 $cafile = trim(substr($val, 9));
             }
@@ -119,8 +118,8 @@ function process($argv)
     }
 
     if (true === $disableTls) {
-        out("You have instructed the Installer not to enforce SSL/TLS security on remote HTTPS requests.", 'info');
-        out("This will leave all downloads during installation vulnerable to Man-In-The-Middle (MITM) attacks.", 'info');
+        out('You have instructed the Installer not to enforce SSL/TLS security on remote HTTPS requests.', 'info');
+        out('This will leave all downloads during installation vulnerable to Man-In-The-Middle (MITM) attacks.', 'info');
     }
 
     if ($check) {
@@ -136,7 +135,7 @@ function process($argv)
 }
 
 /**
- * displays the help
+ * displays the help.
  */
 function displayHelp()
 {
@@ -160,7 +159,7 @@ EOF;
 }
 
 /**
- * check the platform for possible issues on running puli
+ * check the platform for possible issues on running puli.
  */
 function checkPlatform($quiet, $disableTls)
 {
@@ -170,7 +169,7 @@ function checkPlatform($quiet, $disableTls)
     $iniPath = php_ini_loaded_file();
     $displayIniMessage = false;
     if ($iniPath) {
-        $iniMessage = PHP_EOL.PHP_EOL.'The php.ini used by your command-line PHP is: ' . $iniPath;
+        $iniMessage = PHP_EOL.PHP_EOL.'The php.ini used by your command-line PHP is: '.$iniPath;
     } else {
         $iniMessage = PHP_EOL.PHP_EOL.'A php.ini file does not exist. You will have to create one.';
     }
@@ -242,43 +241,43 @@ function checkPlatform($quiet, $disableTls)
     }
 
     if (!empty($errors)) {
-        out("Some settings on your machine make Puli unable to work properly.", 'error');
+        out('Some settings on your machine make Puli unable to work properly.', 'error');
 
         out('Make sure that you fix the issues listed below and run this script again:', 'error');
         foreach ($errors as $error => $current) {
             $text = '';
             switch ($error) {
                 case 'json':
-                    $text = PHP_EOL."The json extension is missing.".PHP_EOL;
-                    $text .= "Install it or recompile php without --disable-json";
+                    $text = PHP_EOL.'The json extension is missing.'.PHP_EOL;
+                    $text .= 'Install it or recompile php without --disable-json';
                     break;
 
                 case 'phar':
-                    $text = PHP_EOL."The phar extension is missing.".PHP_EOL;
-                    $text .= "Install it or recompile php without --disable-phar";
+                    $text = PHP_EOL.'The phar extension is missing.'.PHP_EOL;
+                    $text .= 'Install it or recompile php without --disable-phar';
                     break;
 
                 case 'filter':
-                    $text = PHP_EOL."The filter extension is missing.".PHP_EOL;
-                    $text .= "Install it or recompile php without --disable-filter";
+                    $text = PHP_EOL.'The filter extension is missing.'.PHP_EOL;
+                    $text .= 'Install it or recompile php without --disable-filter';
                     break;
 
                 case 'hash':
-                    $text = PHP_EOL."The hash extension is missing.".PHP_EOL;
-                    $text .= "Install it or recompile php without --disable-hash";
+                    $text = PHP_EOL.'The hash extension is missing.'.PHP_EOL;
+                    $text .= 'Install it or recompile php without --disable-hash';
                     break;
 
                 case 'unicode':
-                    $text = PHP_EOL."The detect_unicode setting must be disabled.".PHP_EOL;
-                    $text .= "Add the following to the end of your `php.ini`:".PHP_EOL;
-                    $text .= "    detect_unicode = Off";
+                    $text = PHP_EOL.'The detect_unicode setting must be disabled.'.PHP_EOL;
+                    $text .= 'Add the following to the end of your `php.ini`:'.PHP_EOL;
+                    $text .= '    detect_unicode = Off';
                     $displayIniMessage = true;
                     break;
 
                 case 'suhosin':
-                    $text = PHP_EOL."The suhosin.executor.include.whitelist setting is incorrect.".PHP_EOL;
-                    $text .= "Add the following to the end of your `php.ini` or suhosin.ini (Example path [for Debian]: /etc/php5/cli/conf.d/suhosin.ini):".PHP_EOL;
-                    $text .= "    suhosin.executor.include.whitelist = phar ".$current;
+                    $text = PHP_EOL.'The suhosin.executor.include.whitelist setting is incorrect.'.PHP_EOL;
+                    $text .= 'Add the following to the end of your `php.ini` or suhosin.ini (Example path [for Debian]: /etc/php5/cli/conf.d/suhosin.ini):'.PHP_EOL;
+                    $text .= '    suhosin.executor.include.whitelist = phar '.$current;
                     $displayIniMessage = true;
                     break;
 
@@ -287,22 +286,22 @@ function checkPlatform($quiet, $disableTls)
                     break;
 
                 case 'allow_url_fopen':
-                    $text = PHP_EOL."The allow_url_fopen setting is incorrect.".PHP_EOL;
-                    $text .= "Add the following to the end of your `php.ini`:".PHP_EOL;
-                    $text .= "    allow_url_fopen = On";
+                    $text = PHP_EOL.'The allow_url_fopen setting is incorrect.'.PHP_EOL;
+                    $text .= 'Add the following to the end of your `php.ini`:'.PHP_EOL;
+                    $text .= '    allow_url_fopen = On';
                     $displayIniMessage = true;
                     break;
 
                 case 'ioncube':
                     $text = PHP_EOL."Your ionCube Loader extension ($current) is incompatible with Phar files.".PHP_EOL;
-                    $text .= "Upgrade to ionCube 4.0.9 or higher or remove this line (path may be different) from your `php.ini` to disable it:".PHP_EOL;
-                    $text .= "    zend_extension = /usr/lib/php5/20090626+lfs/ioncube_loader_lin_5.3.so";
+                    $text .= 'Upgrade to ionCube 4.0.9 or higher or remove this line (path may be different) from your `php.ini` to disable it:'.PHP_EOL;
+                    $text .= '    zend_extension = /usr/lib/php5/20090626+lfs/ioncube_loader_lin_5.3.so';
                     $displayIniMessage = true;
                     break;
 
                 case 'openssl':
-                    $text = PHP_EOL."The openssl extension is missing, which means that secure HTTPS transfers are impossible.".PHP_EOL;
-                    $text .= "If possible you should enable it or recompile php with --with-openssl";
+                    $text = PHP_EOL.'The openssl extension is missing, which means that secure HTTPS transfers are impossible.'.PHP_EOL;
+                    $text .= 'If possible you should enable it or recompile php with --with-openssl';
                     break;
             }
             if ($displayIniMessage) {
@@ -312,37 +311,38 @@ function checkPlatform($quiet, $disableTls)
         }
 
         out('');
+
         return false;
     }
 
     if (!empty($warnings)) {
-        out("Some settings on your machine may cause stability issues with Puli.", 'error');
+        out('Some settings on your machine may cause stability issues with Puli.', 'error');
 
         out('If you encounter issues, try to change the following:', 'error');
         foreach ($warnings as $warning => $current) {
             $text = '';
             switch ($warning) {
                 case 'apc_cli':
-                    $text = PHP_EOL."The apc.enable_cli setting is incorrect.".PHP_EOL;
-                    $text .= "Add the following to the end of your `php.ini`:".PHP_EOL;
-                    $text .= "    apc.enable_cli = Off";
+                    $text = PHP_EOL.'The apc.enable_cli setting is incorrect.'.PHP_EOL;
+                    $text .= 'Add the following to the end of your `php.ini`:'.PHP_EOL;
+                    $text .= '    apc.enable_cli = Off';
                     $displayIniMessage = true;
                     break;
 
                 case 'sigchild':
-                    $text = PHP_EOL."PHP was compiled with --enable-sigchild which can cause issues on some platforms.".PHP_EOL;
-                    $text .= "Recompile it without this flag if possible, see also:".PHP_EOL;
-                    $text .= "    https://bugs.php.net/bug.php?id=22999";
+                    $text = PHP_EOL.'PHP was compiled with --enable-sigchild which can cause issues on some platforms.'.PHP_EOL;
+                    $text .= 'Recompile it without this flag if possible, see also:'.PHP_EOL;
+                    $text .= '    https://bugs.php.net/bug.php?id=22999';
                     break;
 
                 case 'curlwrappers':
-                    $text = PHP_EOL."PHP was compiled with --with-curlwrappers which will cause issues with HTTP authentication and GitHub.".PHP_EOL;
-                    $text .= "Recompile it without this flag if possible";
+                    $text = PHP_EOL.'PHP was compiled with --with-curlwrappers which will cause issues with HTTP authentication and GitHub.'.PHP_EOL;
+                    $text .= 'Recompile it without this flag if possible';
                     break;
 
                 case 'openssl':
-                    $text = PHP_EOL."The openssl extension is missing, which means that secure HTTPS transfers are impossible.".PHP_EOL;
-                    $text .= "If possible you should enable it or recompile php with --with-openssl";
+                    $text = PHP_EOL.'The openssl extension is missing, which means that secure HTTPS transfers are impossible.'.PHP_EOL;
+                    $text .= 'If possible you should enable it or recompile php with --with-openssl';
                     break;
             }
             if ($displayIniMessage) {
@@ -352,23 +352,25 @@ function checkPlatform($quiet, $disableTls)
         }
 
         out('');
+
         return true;
     }
 
     if (!$quiet) {
-        out("All settings correct for using Puli", 'success');
+        out('All settings correct for using Puli', 'success');
     }
+
     return true;
 }
 
 /**
- * installs puli to the current working directory
+ * installs puli to the current working directory.
  */
 function installPuli($version, $installDir, $filename, $quiet, $disableTls, $cafile)
 {
-    $installPath = (is_dir($installDir) ? rtrim($installDir, '/').'/' : '') . $filename;
-    $installDir  = realpath($installDir) ? realpath($installDir) : getcwd();
-    $file        = $installDir.DIRECTORY_SEPARATOR.$filename;
+    $installPath = (is_dir($installDir) ? rtrim($installDir, '/').'/' : '').$filename;
+    $installDir = realpath($installDir) ? realpath($installDir) : getcwd();
+    $file = $installDir.DIRECTORY_SEPARATOR.$filename;
 
     if (is_readable($file)) {
         @unlink($file);
@@ -384,16 +386,16 @@ function installPuli($version, $installDir, $filename, $quiet, $disableTls, $caf
                 if (!getenv('APPDATA')) {
                     throw new RuntimeException('The APPDATA or PULI_HOME environment variable must be set for puli to install correctly');
                 }
-                $home = strtr(getenv('APPDATA'), '\\', '/') . '/Puli';
+                $home = strtr(getenv('APPDATA'), '\\', '/').'/Puli';
             } else {
                 if (!getenv('HOME')) {
                     throw new RuntimeException('The HOME or PULI_HOME environment variable must be set for puli to install correctly');
                 }
-                $home = rtrim(getenv('HOME'), '/') . '/.puli';
+                $home = rtrim(getenv('HOME'), '/').'/.puli';
             }
         }
 
-        $target = $home . '/cacert.pem';
+        $target = $home.'/cacert.pem';
         if (!is_dir($home)) {
             @mkdir($home, 0777, true);
         }
@@ -416,12 +418,12 @@ function installPuli($version, $installDir, $filename, $quiet, $disableTls, $caf
     $retries = 3;
     while ($retries--) {
         if (!$quiet) {
-            out("Downloading...", 'info');
+            out('Downloading...', 'info');
         }
 
         $uriScheme = false === $disableTls ? 'https' : 'http';
-        $urlPath   = (false !== $version ? "/download/{$version}" : '') . '/puli.phar';
-        $url       = "{$uriScheme}://puli.io{$urlPath}";
+        $urlPath = (false !== $version ? "/download/{$version}" : '').'/puli.phar';
+        $url = "{$uriScheme}://puli.io{$urlPath}";
 
         $fh = fopen($file, 'w');
         if (!$fh) {
@@ -468,7 +470,7 @@ function installPuli($version, $installDir, $filename, $quiet, $disableTls, $caf
             unlink($file);
             if ($retries) {
                 if (!$quiet) {
-                   out('The download is corrupt, retrying...', 'error');
+                    out('The download is corrupt, retrying...', 'error');
                 }
             } else {
                 out('The download is corrupt ('.$e->getMessage().'), aborting.', 'error');
@@ -485,20 +487,20 @@ function installPuli($version, $installDir, $filename, $quiet, $disableTls, $caf
     chmod($file, 0755);
 
     if (!$quiet) {
-        out(PHP_EOL."Puli successfully installed to: " . $file, 'success', false);
+        out(PHP_EOL.'Puli successfully installed to: '.$file, 'success', false);
         out(PHP_EOL."Use it: php $installPath", 'info');
     }
 }
 
 /**
- * colorize output
+ * colorize output.
  */
 function out($text, $color = null, $newLine = true)
 {
     $styles = array(
         'success' => "\033[0;32m%s\033[0m",
         'error' => "\033[31;31m%s\033[0m",
-        'info' => "\033[33;33m%s\033[0m"
+        'info' => "\033[33;33m%s\033[0m",
     );
 
     $format = '%s';
@@ -514,7 +516,8 @@ function out($text, $color = null, $newLine = true)
     printf($format, $text);
 }
 
-function validateCaFile($contents) {
+function validateCaFile($contents)
+{
     // assume the CA is valid if php is vunerable to
     // https://www.sektioneins.de/advisories/advisory-012013-php-openssl_x509_parse-memory-corruption-vulnerability.html
     if (
@@ -541,8 +544,8 @@ class ErrorHandler
     }
 }
 
-class HttpClient {
-
+class HttpClient
+{
     private $options = array('http' => array());
     private $disableTls = false;
 
@@ -552,7 +555,7 @@ class HttpClient {
         if ($this->disableTls === false) {
             if (!empty($cafile)) {
                 if (!is_readable($cafile) || !validateCaFile(file_get_contents($cafile))) {
-                    throw new RuntimeException('The configured cafile (' .$cafile. ') was not valid or could not be read.');
+                    throw new RuntimeException('The configured cafile ('.$cafile.') was not valid or could not be read.');
                 }
             }
             $options = $this->getTlsStreamContextDefaults($cafile);
@@ -644,10 +647,10 @@ class HttpClient {
             '!DES',
             '!3DES',
             '!MD5',
-            '!PSK'
+            '!PSK',
         ));
 
-        /**
+        /*
          * CN_match and SNI_server_name are only known once a URL is passed.
          * They will be set in the getOptionsForUrl() method which receives a URL.
          *
@@ -659,10 +662,10 @@ class HttpClient {
                 'verify_peer' => true,
                 'verify_depth' => 7,
                 'SNI_enabled' => true,
-            )
+            ),
         );
 
-        /**
+        /*
          * Attempt to find a local cafile or throw an exception.
          * The user may go download one if this occurs.
          */
@@ -677,7 +680,7 @@ class HttpClient {
             throw new RuntimeException('A valid cafile could not be located automatically.');
         }
 
-        /**
+        /*
          * Disable TLS compression to prevent CRIME attacks where supported.
          */
         if (version_compare(PHP_VERSION, '5.4.13') >= 0) {
@@ -688,12 +691,14 @@ class HttpClient {
     }
 
     /**
-     * function copied from Composer\Util\StreamContextFactory::getContext
+     * function copied from Composer\Util\StreamContextFactory::getContext.
      *
      * Any changes should be applied there as well, or backported here.
      *
      * @param string $url URL the context is to be used for
+     *
      * @return resource Default context
+     *
      * @throws \RuntimeException if https proxy required and OpenSSL uninstalled
      */
     protected function getMergedStreamContext($url)
@@ -707,15 +712,15 @@ class HttpClient {
         }
 
         if (!empty($proxy)) {
-            $proxyURL = isset($proxy['scheme']) ? $proxy['scheme'] . '://' : '';
+            $proxyURL = isset($proxy['scheme']) ? $proxy['scheme'].'://' : '';
             $proxyURL .= isset($proxy['host']) ? $proxy['host'] : '';
 
             if (isset($proxy['port'])) {
-                $proxyURL .= ":" . $proxy['port'];
-            } elseif ('http://' == substr($proxyURL, 0, 7)) {
-                $proxyURL .= ":80";
-            } elseif ('https://' == substr($proxyURL, 0, 8)) {
-                $proxyURL .= ":443";
+                $proxyURL .= ':'.$proxy['port'];
+            } elseif ('http://' === substr($proxyURL, 0, 7)) {
+                $proxyURL .= ':80';
+            } elseif ('https://' === substr($proxyURL, 0, 8)) {
+                $proxyURL .= ':443';
             }
 
             // http(s):// is not supported in proxy
@@ -726,7 +731,7 @@ class HttpClient {
             }
 
             $options['http'] = array(
-                'proxy'           => $proxyURL,
+                'proxy' => $proxyURL,
             );
 
             // enabled request_fulluri unless it is explicitly disabled
@@ -745,11 +750,10 @@ class HttpClient {
                     break;
             }
 
-
             if (isset($proxy['user'])) {
                 $auth = urldecode($proxy['user']);
                 if (isset($proxy['pass'])) {
-                    $auth .= ':' . urldecode($proxy['pass']);
+                    $auth .= ':'.urldecode($proxy['pass']);
                 }
                 $auth = base64_encode($auth);
 
@@ -773,7 +777,7 @@ class HttpClient {
 
     /**
      * This method was adapted from Sslurp.
-     * https://github.com/EvanDotPro/Sslurp
+     * https://github.com/EvanDotPro/Sslurp.
      *
      * (c) Evan Coury <me@evancoury.com>
      *
@@ -855,6 +859,7 @@ class HttpClient {
         if ($found) {
             $found = $caBundle;
         }
+
         return $found;
     }
 
@@ -4648,5 +4653,4 @@ zqY6tQMzT3bR51xUAV3LePTJDL/PEo4XLSNolOer/qmyKwbQBM0=
 -----END CERTIFICATE-----
 CACERT;
     }
-
 }
