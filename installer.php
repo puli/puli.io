@@ -207,10 +207,6 @@ function checkPlatform($quiet, $disableTls)
         $errors['filter'] = true;
     }
 
-    if (!extension_loaded('hash')) {
-        $errors['hash'] = true;
-    }
-
     if (!ini_get('allow_url_fopen')) {
         $errors['allow_url_fopen'] = true;
     }
@@ -268,11 +264,6 @@ function checkPlatform($quiet, $disableTls)
                 case 'filter':
                     $text = PHP_EOL.'The filter extension is missing.'.PHP_EOL;
                     $text .= 'Install it or recompile php without --disable-filter';
-                    break;
-
-                case 'hash':
-                    $text = PHP_EOL.'The hash extension is missing.'.PHP_EOL;
-                    $text .= 'Install it or recompile php without --disable-hash';
                     break;
 
                 case 'unicode':
