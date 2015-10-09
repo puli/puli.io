@@ -29,12 +29,15 @@
  * @author Thomas Rudolph <me@holloway-web.de>
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
-process(is_array($argv) ? $argv : array());
+
+run(is_array($argv) ? $argv : array());
 
 /**
- * processes the installer.
+ * Runs the installer.
+ *
+ * @param array $argv The console arguments.
  */
-function process($argv)
+function run(array $argv)
 {
     $check = in_array('--check', $argv);
     $help = in_array('--help', $argv);
@@ -135,13 +138,13 @@ function process($argv)
 }
 
 /**
- * displays the help.
+ * Displays the help.
  */
 function displayHelp()
 {
     echo <<<EOF
 Puli Installer
-------------------
+--------------
 Options
 --help               this help
 --check              for checking environment only
@@ -149,17 +152,22 @@ Options
 --ansi               force ANSI color output
 --no-ansi            disable ANSI color output
 --quiet              do not output unimportant messages
---install-dir="..."  accepts a target installation directory
---version="..."      accepts a specific version to install instead of the latest
---filename="..."     accepts a target filename (default: puli.phar)
+--install-dir="..."  set the target installation directory
+--version="..."      install a specific version
+--filename="..."     set the target filename (default: puli.phar)
 --disable-tls        disable SSL/TLS security for file downloads
---cafile="..."       accepts a path to a Certificate Authority (CA) certificate file for SSL/TLS verification
+--cafile="..."       set the path to a Certificate Authority (CA) certificate file for SSL/TLS verification
 
 EOF;
 }
 
 /**
- * check the platform for possible issues on running puli.
+ * Check the platform for possible issues on running Puli.
+ *
+ * @param bool $quiet      Whether to suppress error output.
+ * @param bool $disableTls Whether to disable TLS.
+ *
+ * @return bool Whether the platform requirements are satisfied.
  */
 function checkPlatform($quiet, $disableTls)
 {
@@ -364,7 +372,16 @@ function checkPlatform($quiet, $disableTls)
 }
 
 /**
- * installs puli to the current working directory.
+ * Installs puli to the current working directory.
+ *
+ * @param string $version    The version to install.
+ * @param string $installDir The directory to install to.
+ * @param string $filename   The filename to use.
+ * @param bool   $quiet      Whether to suppress all output.
+ * @param bool   $disableTls Whether to disable TLS.
+ * @param string $cafile     The CA file to use.
+ *
+ * @throws Exception
  */
 function installPuli($version, $installDir, $filename, $quiet, $disableTls, $cafile)
 {
@@ -493,9 +510,13 @@ function installPuli($version, $installDir, $filename, $quiet, $disableTls, $caf
 }
 
 /**
- * colorize output.
+ * Print colorized output.
+ *
+ * @param string $text    The text to print.
+ * @param string $style   The style to use.
+ * @param bool   $newLine Whether to print a newline after the text.
  */
-function out($text, $color = null, $newLine = true)
+function out($text, $style = null, $newLine = true)
 {
     $styles = array(
         'success' => "\033[0;32m%s\033[0m",
@@ -505,8 +526,8 @@ function out($text, $color = null, $newLine = true)
 
     $format = '%s';
 
-    if (isset($styles[$color]) && USE_ANSI) {
-        $format = $styles[$color];
+    if (isset($styles[$style]) && USE_ANSI) {
+        $format = $styles[$style];
     }
 
     if ($newLine) {
@@ -518,7 +539,7 @@ function out($text, $color = null, $newLine = true)
 
 function validateCaFile($contents)
 {
-    // assume the CA is valid if php is vunerable to
+    // assume the CA is valid if php is vulnerable to
     // https://www.sektioneins.de/advisories/advisory-012013-php-openssl_x509_parse-memory-corruption-vulnerability.html
     if (
         PHP_VERSION_ID <= 50327
