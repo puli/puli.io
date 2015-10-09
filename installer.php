@@ -203,10 +203,6 @@ function checkPlatform($quiet, $disableTls)
         $errors['phar'] = true;
     }
 
-    if (!extension_loaded('filter')) {
-        $errors['filter'] = true;
-    }
-
     if (!ini_get('allow_url_fopen')) {
         $errors['allow_url_fopen'] = true;
     }
@@ -259,11 +255,6 @@ function checkPlatform($quiet, $disableTls)
                 case 'phar':
                     $text = PHP_EOL.'The phar extension is missing.'.PHP_EOL;
                     $text .= 'Install it or recompile php without --disable-phar';
-                    break;
-
-                case 'filter':
-                    $text = PHP_EOL.'The filter extension is missing.'.PHP_EOL;
-                    $text .= 'Install it or recompile php without --disable-filter';
                     break;
 
                 case 'unicode':
