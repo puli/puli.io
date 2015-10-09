@@ -148,7 +148,7 @@ Puli Installer
 Options
 --help               this help
 --check              for checking environment only
---force              forces the installation
+--force              forces the installation even if the system requirements are not satisfied
 --ansi               force ANSI color output
 --no-ansi            disable ANSI color output
 --quiet              do not output unimportant messages
