@@ -215,7 +215,7 @@ function checkPlatform($quiet, $disableTls)
         $errors['php'] = PHP_VERSION;
     }
 
-    if (!extension_loaded('openssl') && true === $disableTls) {
+    if (!extension_loaded('openssl') && $disableTls) {
         $warnings['openssl'] = true;
     } elseif (!extension_loaded('openssl')) {
         $errors['openssl'] = true;
@@ -375,38 +375,24 @@ function installPuli($version, $installDir, $filename, $quiet, $disableTls, $caf
         @unlink($file);
     }
 
-    if (false === $disableTls && empty($cafile) && !HttpClient::getSystemCaRootBundlePath()) {
+    if (!$disableTls && empty($cafile) && !HttpClient::getSystemCaRootBundlePath()) {
         $errorHandler = new ErrorHandler();
         set_error_handler(array($errorHandler, 'handleError'));
 
-        $home = getenv('PULI_HOME');
-        if (!$home) {
-            if (defined('PHP_WINDOWS_VERSION_MAJOR')) {
-                if (!getenv('APPDATA')) {
-                    throw new RuntimeException('The APPDATA or PULI_HOME environment variable must be set for puli to install correctly');
-                }
-                $home = strtr(getenv('APPDATA'), '\\', '/').'/Puli';
-            } else {
-                if (!getenv('HOME')) {
-                    throw new RuntimeException('The HOME or PULI_HOME environment variable must be set for puli to install correctly');
-                }
-                $home = rtrim(getenv('HOME'), '/').'/.puli';
-            }
-        }
-
-        $target = $home.'/cacert.pem';
+        $home = getHomeDirectory();
         if (!is_dir($home)) {
             @mkdir($home, 0777, true);
         }
-        $write = file_put_contents($target, HttpClient::getPackagedCaFile(), LOCK_EX);
-        @chmod($target, 0644);
+
+        $cafile = $home.'/cacert.pem';
+        $write = file_put_contents($cafile, HttpClient::getPackagedCaFile(), LOCK_EX);
+        @chmod($cafile, 0644);
 
         restore_error_handler();
 
         if (!$write) {
-            throw new RuntimeException('Unable to write bundled cacert.pem to: '.$target);
+            throw new RuntimeException('Unable to write bundled cacert.pem to: '.$cafile);
         }
-        $cafile = $target;
     }
 
     $httpClient = new HttpClient($disableTls, $cafile);
@@ -421,8 +407,7 @@ function installPuli($version, $installDir, $filename, $quiet, $disableTls, $caf
         }
 
         $uriScheme = false === $disableTls ? 'https' : 'http';
-        $urlPath = (false !== $version ? "/download/{$version}" : '').'/puli.phar';
-        $url = "{$uriScheme}://puli.io{$urlPath}";
+        $url = "{$uriScheme}://github.com/puli/cli/releases/download/{$version}/puli.phar";
 
         $fh = fopen($file, 'w');
         if (!$fh) {
@@ -490,6 +475,31 @@ function installPuli($version, $installDir, $filename, $quiet, $disableTls, $caf
         out(PHP_EOL."Use it: php $installPath", 'info');
     }
 }
+/**
+ * Returns the system's home directory.
+ *
+ * @return string The absolute path to the home directory.
+ */
+function getHomeDirectory()
+{
+    if ($home = getenv('PULI_HOME')) {
+        return $home;
+    }
+
+    if (defined('PHP_WINDOWS_VERSION_MAJOR')) {
+        if (!getenv('APPDATA')) {
+            throw new RuntimeException('The APPDATA or PULI_HOME environment variable must be set for puli to install correctly');
+        }
+
+        return strtr(getenv('APPDATA'), '\\', '/').'/Puli';
+    }
+
+    if (!getenv('HOME')) {
+        throw new RuntimeException('The HOME or PULI_HOME environment variable must be set for puli to install correctly');
+    }
+
+    return rtrim(getenv('HOME'), '/').'/.puli';
+}
 
 /**
  * Print colorized output.
@@ -519,21 +529,6 @@ function out($text, $style = null, $newLine = true)
     printf($format, $text);
 }
 
-function validateCaFile($contents)
-{
-    // assume the CA is valid if php is vulnerable to
-    // https://www.sektioneins.de/advisories/advisory-012013-php-openssl_x509_parse-memory-corruption-vulnerability.html
-    if (
-        PHP_VERSION_ID <= 50327
-        || (PHP_VERSION_ID >= 50400 && PHP_VERSION_ID < 50422)
-        || (PHP_VERSION_ID >= 50500 && PHP_VERSION_ID < 50506)
-    ) {
-        return !empty($contents);
-    }
-
-    return (bool) openssl_x509_parse($contents);
-}
-
 class ErrorHandler
 {
     public $message = '';
@@ -549,7 +544,10 @@ class ErrorHandler
 
 class HttpClient
 {
+    private static $caBundle;
+
     private $options = array('http' => array());
+
     private $disableTls = false;
 
     public function __construct($disableTls = false, $cafile = false)
@@ -557,7 +555,7 @@ class HttpClient
         $this->disableTls = $disableTls;
         if ($this->disableTls === false) {
             if (!empty($cafile)) {
-                if (!is_readable($cafile) || !validateCaFile(file_get_contents($cafile))) {
+                if (!is_readable($cafile) || !self::validateCaFile(file_get_contents($cafile))) {
                     throw new RuntimeException('The configured cafile ('.$cafile.') was not valid or could not be read.');
                 }
             }
@@ -778,6 +776,15 @@ class HttpClient
         return stream_context_create($options);
     }
 
+    public static function getSystemCaRootBundlePath()
+    {
+        if (null === self::$caBundle) {
+            self::$caBundle = self::detectSystemCaRootBundlePath();
+        }
+
+        return self::$caBundle;
+    }
+
     /**
      * This method was adapted from Sslurp.
      * https://github.com/EvanDotPro/Sslurp.
@@ -810,17 +817,12 @@ class HttpClient
      * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
      * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
      */
-    public static function getSystemCaRootBundlePath()
+    public static function detectSystemCaRootBundlePath()
     {
-        static $found = null;
-        if ($found !== null) {
-            return $found;
-        }
-
         // If SSL_CERT_FILE env variable points to a valid certificate/bundle, use that.
         // This mimics how OpenSSL uses the SSL_CERT_FILE env variable.
         $envCertFile = getenv('SSL_CERT_FILE');
-        if ($envCertFile && is_readable($envCertFile) && validateCaFile(file_get_contents($envCertFile))) {
+        if ($envCertFile && is_readable($envCertFile) && self::validateCaFile(file_get_contents($envCertFile))) {
             // Possibly throw exception instead of ignoring SSL_CERT_FILE if it's invalid?
             return $envCertFile;
         }
@@ -837,33 +839,42 @@ class HttpClient
             '/etc/ssl/cert.pem', // OpenBSD
         );
 
-        $found = null;
-        $configured = ini_get('openssl.cafile');
-        if ($configured && strlen($configured) > 0 && is_readable($caBundle) && validateCaFile(file_get_contents($caBundle))) {
-            $found = true;
-            $caBundle = $configured;
-        } else {
-            foreach ($caBundlePaths as $caBundle) {
-                if (@is_readable($caBundle) && validateCaFile(file_get_contents($caBundle))) {
-                    $found = true;
-                    break;
-                }
-            }
-            if (!$found) {
-                foreach ($caBundlePaths as $caBundle) {
-                    $caBundle = dirname($caBundle);
-                    if (is_dir($caBundle) && glob($caBundle.'/*')) {
-                        $found = true;
-                        break;
-                    }
-                }
-            }
-        }
-        if ($found) {
-            $found = $caBundle;
+        $caBundle = ini_get('openssl.cafile');
+
+        if ($caBundle && strlen($caBundle) > 0 && is_readable($caBundle) && self::validateCaFile(file_get_contents($caBundle))) {
+            return $caBundle;
         }
 
-        return $found;
+        foreach ($caBundlePaths as $caBundle) {
+            if (@is_readable($caBundle) && self::validateCaFile(file_get_contents($caBundle))) {
+                return $caBundle;
+            }
+        }
+
+        foreach ($caBundlePaths as $caBundle) {
+            $caBundle = dirname($caBundle);
+
+            if (is_dir($caBundle) && glob($caBundle.'/*')) {
+                return $caBundle;
+            }
+        }
+
+        return null;
+    }
+
+    public static function validateCaFile($contents)
+    {
+        // assume the CA is valid if php is vulnerable to
+        // https://www.sektioneins.de/advisories/advisory-012013-php-openssl_x509_parse-memory-corruption-vulnerability.html
+        if (
+            PHP_VERSION_ID <= 50327
+            || (PHP_VERSION_ID >= 50400 && PHP_VERSION_ID < 50422)
+            || (PHP_VERSION_ID >= 50500 && PHP_VERSION_ID < 50506)
+        ) {
+            return !empty($contents);
+        }
+
+        return (bool) openssl_x509_parse($contents);
     }
 
     public static function getPackagedCaFile()
