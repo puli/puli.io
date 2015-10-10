@@ -1,0 +1,7 @@
+repo = https://github.com/puli/puli.io.git
+host = example.com
+port = 22
+user = username
+password = password
+path = /var/www/example.com
+env_vars =
