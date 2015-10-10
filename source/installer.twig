@@ -1,0 +1,25 @@
+---
+permalink: installer
+---
+<?php
+
+/*
+ * This file is part of the puli/puli.io package.
+ *
+ * (c) Bernhard Schussek <bschussek@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Puli\Installer;
+
+$installer = new Installer();
+$installer->run(is_array($argv) ? $argv : array());
+
+{# see sculpin_twig.source_view_paths in sculpin_kernel.yml #}
+{# remove leading "<?php", file header and namespace #}
+{{ include('Installer.php')|slice(247)|raw }}
+{{ include('ErrorHandler.php')|slice(247)|raw }}
+{{ include('HttpClient.php')|slice(247)|raw }}
+{{ include('MozillaCaFile.php')|slice(247)|raw }}

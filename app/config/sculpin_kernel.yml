@@ -1,0 +1,11 @@
+sculpin_content_types:
+    posts:
+        enabled: false
+
+sculpin_twig:
+    source_view_paths:
+        - _views
+        - _layouts
+        - _includes
+        - _partials
+        - ../.sculpin/puli/installer/src

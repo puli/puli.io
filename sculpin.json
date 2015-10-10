@@ -1,0 +1,11 @@
+{
+    "authors": [
+        {
+            "name": "Bernhard Schussek",
+            "homepage": "https://puli.io"
+        }
+    ],
+    "require": {
+        "puli/installer": "^1.0-dev"
+    }
+}
