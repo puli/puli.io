@@ -9,3 +9,4 @@ sculpin_twig:
         - _includes
         - _partials
         - ../.sculpin/puli/installer/src
+        - ../.sculpin/padraic/phar-updater/src

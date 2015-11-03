@@ -19,7 +19,8 @@ $installer->run(is_array($argv) ? $argv : array());
 
 {# see sculpin_twig.source_view_paths in sculpin_kernel.yml #}
 {# remove leading "<?php" #}
-{{ include('Installer.php')|slice(7)|raw }}
-{{ include('ErrorHandler.php')|slice(7)|raw }}
-{{ include('HttpClient.php')|slice(7)|raw }}
-{{ include('MozillaCaFile.php')|slice(7)|raw }}
+{{ source('Installer.php')|slice(7)|raw }}
+{{ source('ErrorHandler.php')|slice(7)|raw }}
+{{ source('VersionParser.php')|slice(6)|raw }}
+{{ source('HttpClient.php')|slice(7)|raw }}
+{{ source('MozillaCaFile.php')|slice(7)|raw }}
