@@ -1,7 +1,16 @@
 repo = https://github.com/puli/puli.io.git
+
 host = example.com
 port = 22
 user = username
 password = password
 path = /var/www/example.com
 env_vars =
+
+mockup.branch = mockup
+mockup.host = example.com
+mockup.port = 22
+mockup.user = username
+mockup.password = password
+mockup.path = /var/www/example.com
+mockup.env_vars =

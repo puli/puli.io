@@ -22,6 +22,14 @@ server('prod', $config['host'], $config['port'])
     ->env('deploy_path', $config['path'])
     ->env('env_vars', $config['env_vars']);
 
+server('mockup', $config['mockup.host'], $config['mockup.port'])
+    ->user($config['mockup.user'])
+    ->password($config['mockup.password'])
+    ->stage('production')
+    ->env('deploy_path', $config['mockup.path'])
+    ->env('env_vars', $config['mockup.env_vars'])
+    ->env('branch', $config['mockup.branch']);
+
 task('deploy:push', function () {
     runLocally("git push");
 })->desc('Installing vendors');
