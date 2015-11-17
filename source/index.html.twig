@@ -18,17 +18,7 @@ section: features
 
     <section class="slide slide2">
         <div class="container slide-body">
-            <h1>One PHP Community</h1>
-
-            <p class="lead">Embrace collaboration and sharing.</p>
-
-            <p>Puli (pronounced "poo-lee") is a toolkit for creating and loading
-                PHP packages. Puli's goal is to support collaboration and
-                sharing in the PHP community by replacing the "bundle", "module"
-                and "plugin" concepts of different platforms by one common
-                solution.</p>
-
-            <p class="text-center"><img src="/images/community.png" alt="Unify the PHP community."/></p>
+            <p class="text-center">Logos of reference projects.</p>
         </div>
     </section>
 
@@ -38,8 +28,10 @@ section: features
 
             <p class="lead">A universal package concept.</p>
 
-            <p>A Puli package is a directory that contains a <code>puli.json</code> file.
-                This file configures how Puli loads the package.</p>
+            <p>Puli (pronounced "poo-lee") is a toolkit for creating and loading
+                PHP packages. A Puli package is a directory that contains a
+                <code>puli.json</code> file. This file configures how Puli loads
+                the package.</p>
 
 <pre><code class="language-none">my-package/
     src/
@@ -58,6 +50,40 @@ section: features
             <p>The <a href="">Puli plugin for Composer</a> recognizes and
                 activates installed packages. You can also use other channels of
                 distribution and activate your packages manually.</p>
+        </div>
+    </section>
+
+    <section class="slide slide2">
+        <div class="container slide-body">
+            <h1>Puli for Enterprises</h1>
+
+            <p class="lead">Build flexible plugin systems.</p>
+
+            <p>Puli packages can be installed in two ways: Use Composer or copy
+                them to your project and activate them manually with the
+                <code>puli</code> command. Once a Puli package is installed, it
+                discovers and uses other Puli packages almost automatically.
+                This allows you to build flexible plugin infrastructures that
+                can easily be maintained by non-technical users.</p>
+
+            <p class="text-center" style="padding: 10px; border: 1px solid lightgray">Graphic that shows packages that discover each other automatically.</p>
+        </div>
+    </section>
+
+    <section class="slide slide3">
+        <div class="container slide-body">
+            <h1>Puli for <abbr title="Open-Source Software">OSS</abbr> Projects</h1>
+
+            <p class="lead">Share with other communities.</p>
+
+            <p>Puli handles all of your package management concerns. Want to
+                build a theming system? Need to find certain files in the
+                installed packages of a project? Let Puli do it for you. And
+                best of all, contrary to "bundles" or "modules" of current PHP
+                frameworks Puli packages can be shared with other communities
+                that support Puli as well.</p>
+
+            <p class="text-center" style="padding: 10px; border: 1px solid lightgray">Graphic that shows how a Puli package can be used with different PHP frameworks or without any framework.</p>
         </div>
     </section>
 
