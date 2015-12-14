@@ -3,6 +3,14 @@ permalink: installer
 ---
 <?php
 
+{# see sculpin_twig.source_view_paths in sculpin_kernel.yml #}
+{# remove leading "<?php" #}
+{{ source('Installer.php')|slice(7)|raw }}
+{{ source('ErrorHandler.php')|slice(7)|raw }}
+{{ source('VersionParser.php')|slice(6)|raw }}
+{{ source('HttpClient.php')|slice(7)|raw }}
+{{ source('Humbug/FileGetContents.php')|slice(6)|raw }}
+
 /*
  * This file is part of the puli/puli.io package.
  *
@@ -14,12 +22,7 @@ permalink: installer
 
 namespace Puli\Installer;
 
+{{ source('function.php')|slice(6)|raw }}
+
 $installer = new Installer();
 $installer->run(is_array($argv) ? $argv : array());
-
-{# see sculpin_twig.source_view_paths in sculpin_kernel.yml #}
-{# remove leading "<?php" #}
-{{ source('Installer.php')|slice(7)|raw }}
-{{ source('ErrorHandler.php')|slice(7)|raw }}
-{{ source('VersionParser.php')|slice(6)|raw }}
-{{ source('HttpClient.php')|slice(7)|raw }}

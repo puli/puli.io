@@ -10,3 +10,4 @@ sculpin_twig:
         - _partials
         - ../.sculpin/puli/installer/src
         - ../.sculpin/padraic/phar-updater/src
+        - ../.sculpin/padraic/humbug_get_contents/src
